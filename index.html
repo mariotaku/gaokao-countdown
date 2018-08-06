@@ -10,49 +10,16 @@
 </head>
 
 <body>
+  <img id="countdownBackground" class="background"></img>
+  <div class="background-mask"></div>
   <div id="countdownTitle" class="banner-title">距离
     <span id="countdownYear"></span>年高考还有</div>
 
   <div id="countdownClock"></div>
 
-  <script type="text/javascript">
-    window.$ = window.jQuery = require('jquery');
-    require('flipclock');
-
-    console.log($(document))
-
-    $(document).ready(function () {
-      var now = new Date()
-      var nextDate = new Date()
-      nextDate.setMonth(5) // June
-      nextDate.setDate(7)
-      nextDate.setHours(9)
-      nextDate.setMinutes(0)
-      nextDate.setSeconds(0)
-
-      if (nextDate.getTime() < now.getTime()) {
-        nextDate.setFullYear(now.getFullYear() + 1)
-      }
-
-      console.log(nextDate)
-
-      $('#countdownYear').text(function (i, oldtext) {
-        return nextDate.getFullYear();
-      })
-
-      var countdownSeconds = (nextDate.getTime() - now.getTime()) / 1000
-      var clock = $('#countdownClock').FlipClock(countdownSeconds, {
-        clockFace: 'DailyCounter',
-        clockFaceOptions: {
-          countdown: true,
-          showSeconds: true,
-          defaultLanguage: 'zh-cn',
-          language: 'zh-cn',
-        }
-      });
-      clock.stop();
-    });
-
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
   </script>
 </body>
 

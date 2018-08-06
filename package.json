@@ -20,6 +20,7 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "datejs": "^1.0.0-rc3",
     "flipclock": "^0.8.2"
   }
 }
