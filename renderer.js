@@ -20,8 +20,8 @@ let clockOptions = {
 
 function setupCountdown(initClock) {
     var now = new Date()
-    var examStart = Date.parse('August 6, 16:44 AM')
-    var examEnd = Date.parse('August 6, 16:45 AM')
+    var examStart = Date.parse('June 7, 9:00')
+    var examEnd = Date.parse('June 8, 17:00')
 
     var examInProgress = false;
     if (examStart.getTime() < now.getTime()) {
@@ -44,7 +44,7 @@ function setupCountdown(initClock) {
         }
 
         let timeTillEnd = examEnd.getTime() - now.getTime();
-        window.setInterval(() => { setupCountdown(true); }, timeTillEnd);
+        window.setTimeout(() => { setupCountdown(true); }, timeTillEnd);
         return;
     }
     var countdownSeconds = (examStart.getTime() - now.getTime()) / 1000;
