@@ -135,8 +135,7 @@ function resetBackground() {
 function toggleFrameless() {
     settings.set('frameless', !(settings.get('frameless') == true));
 
-    app.relaunch();
-    app.exit(0);
+    remote.getGlobal('recreateWindow')();
 }
 
 function dropImage(ev) {

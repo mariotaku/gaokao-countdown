@@ -6,7 +6,10 @@ const settings = require('electron-settings');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+var deferQuit = false
+
 function createWindow() {
+  deferQuit = false
   // Create the browser window.
   let frameless = settings.get('frameless') == true
   mainWindow = new BrowserWindow({ width: 800, height: 600, frame: !frameless })
@@ -35,9 +38,7 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  if (!deferQuit) {
     app.quit()
   }
 })
@@ -49,6 +50,14 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+global.recreateWindow = () => {
+  deferQuit = true
+  if (mainWindow) {
+    mainWindow.close()
+  }
+  createWindow()
+}
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
