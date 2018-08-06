@@ -40,13 +40,11 @@ function setupCountdown() {
 }
 
 function setupBackground() {
-    //     var bg = settings.get('app-background');
-    $('#countdownBackground').css('background-image', './zz47.jpg')
-    // $('#countdownBackground').attr('src', function (i, src) {
-    //     var bg = settings.get('app-background');
-    //     if (!bg) return './zz47.jpg';
-    //     return bg;
-    // });
+    $('#countdownBackground').css('background-image', function (i, src) {
+        var bg = settings.get('app-background');
+        if (!bg) return 'url("./zz47.jpg")';
+        return `url("${bg}")`;
+    });
 }
 
 function applyBackground(file) {
@@ -118,6 +116,8 @@ function setupContextMenu() {
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: '还原背景', click: resetBackground }));
         menu.append(new MenuItem({ type: 'checkbox', label: '无边框', checked: frameless, click: toggleFrameless }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ label: '退出', click: function () { app.exit(0); } }));
         menu.popup({ window: remote.getCurrentWindow() });
     }, false);
 }

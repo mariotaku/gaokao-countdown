@@ -13,6 +13,7 @@ html, body {
   height: 100%;
   background-image: url('./zz47.jpg');
   background-size: cover;
+  background-position: center;
 }
 
 .background::before {
@@ -37,11 +38,13 @@ html, body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   font-size: 60px;
+  font-weight: 600;
   text-shadow: 0px 2px 4px rgba(0, 0, 0, .5);
 }
 
 .flipclock-wrapper {
   background: transparent;
+  display: flex;
 }
 
 .flipclock-divider .flipclock-label {
