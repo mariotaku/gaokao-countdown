@@ -58,15 +58,16 @@ function setupBackground() {
             console.error(err);
             return;
         }
-        console.log(palette);
         let swatch = palette.DarkVibrant || palette.DarkMuted;
-        if (!swatch) {
-            return;
+        let backgroundColor;
+        if (swatch) {
+            backgroundColor = `rgba(${swatch.r}, ${swatch.g}, ${swatch.b}, 0.5)`
+        } else {
+            backgroundColor = `rgba(0, 0, 0, 0.5)`
         }
-        let backgroundColor = `rgba(${swatch.r}, ${swatch.g}, ${swatch.b}, 0.5)`
+
 
         let styleSheet = getStyleSheet('app_styles');
-        console.log(backgroundColor);
         for (var i = 0; i < styleSheet.cssRules.length; i++) {
             let rule = styleSheet.cssRules[i];
             if (rule.selectorText == '.background::before') {
