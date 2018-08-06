@@ -40,11 +40,13 @@ function setupCountdown() {
 }
 
 function setupBackground() {
-    $('#countdownBackground').attr('src', function (i, src) {
-        var bg = settings.get('app-background');
-        if (!bg) return './zz47.jpg';
-        return bg;
-    });
+    //     var bg = settings.get('app-background');
+    $('#countdownBackground').css('background-image', './zz47.jpg')
+    // $('#countdownBackground').attr('src', function (i, src) {
+    //     var bg = settings.get('app-background');
+    //     if (!bg) return './zz47.jpg';
+    //     return bg;
+    // });
 }
 
 function applyBackground(file) {
@@ -128,7 +130,7 @@ $(document).ready(function () {
     // Restart every midnight to prevent from memory leaks and inaccurates
     var interval = Date.today().add(1).days().getTime() - Date.now();
     window.setInterval(function () {
-        window.location.reload(true);
+        setupCountdown();
     }, interval);
 });
 

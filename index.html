@@ -7,15 +7,20 @@
 
   <link rel="stylesheet" href="node_modules/flipclock/dist/flipclock.css" />
   <link rel="stylesheet" href="styles.css" />
+
 </head>
 
 <body>
-  <img id="countdownBackground" class="background"></img>
-  <div class="background-mask"></div>
-  <div id="countdownTitle" class="banner-title">距离
-    <span id="countdownYear"></span>年高考还有</div>
+  <div id="countdownBackground" class="background">
+    <div class="countdown-container">
+      <div id="countdownTitle" class="banner-title">距离
+        <span id="countdownYear"></span>年高考还有
+      </div>
+      <div id="countdownClock"></div>
+    </div>
+    
+  </div>
 
-  <div id="countdownClock"></div>
 
   <script>
     // You can also require other files to run in this process
