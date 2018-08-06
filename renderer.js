@@ -194,6 +194,15 @@ $(document).ready(function () {
     // Restart every midnight to prevent from memory leaks and inaccurates
     var interval = Date.today().add(1).days().getTime() - Date.now();
     window.setInterval(() => { setupCountdown(true); }, interval);
+
+    window.onresize = (ev) => {
+        let width = document.body.offsetWidth;
+        if (width > 800) {
+            $('.countdown-container').css('transform', 'scale(1)');
+        } else {
+            $('.countdown-container').css('transform', `scale(${width / 800})`);
+        }
+    };
 });
 
 document.addEventListener('drop', (e) => {
