@@ -8,6 +8,8 @@ window.$ = window.jQuery = require('jquery');
 require('flipclock');
 require('datejs');
 
+var dayDigits = 0;
+
 let clockOptions = {
     clockFace: 'DailyCounter',
     clockFaceOptions: {
@@ -53,7 +55,10 @@ function setupCountdown(initClock) {
         var clock = $('#countdownClock').FlipClock(countdownSeconds, clockOptions);
         clock.face.once('stop', () => {
             setupCountdown(false);
-        })
+        });
+        clock.face.on('flip', () => {
+            fixLabelPosition();
+        });
     }
 }
 
@@ -186,23 +191,42 @@ function setupContextMenu() {
     }, false);
 }
 
+function updateContentScale() {
+    let width = document.body.offsetWidth;
+    if (width > 800) {
+        $('.countdown-container').css('transform', 'scale(1)');
+    } else {
+        $('.countdown-container').css('transform', `scale(${width / 800})`);
+    }
+}
+
+function fixLabelPosition() {
+    let dayDivider = $($('.flipclock-wrapper').children()[0]);
+    let dayDigits = dayDivider.nextUntil('.flipclock-divider').length;
+
+    if (dayDigits == this.dayDigits) return;
+
+    let dayLabel = $('.flipclock-label', dayDivider);
+    if (dayDigits == 3) {
+        dayLabel.css('right', '-120px');
+    } else {
+        dayLabel.css('right', '-86px');
+    }
+    this.dayDigits = dayDigits;
+}
+
 $(document).ready(function () {
     setupBackground();
     setupCountdown(true);
     setupContextMenu();
+    updateContentScale();
+
+    fixLabelPosition();
 
     // Restart every midnight to prevent from memory leaks and inaccurates
     var interval = Date.today().add(1).days().getTime() - Date.now();
     window.setInterval(() => { setupCountdown(true); }, interval);
-
-    window.onresize = (ev) => {
-        let width = document.body.offsetWidth;
-        if (width > 800) {
-            $('.countdown-container').css('transform', 'scale(1)');
-        } else {
-            $('.countdown-container').css('transform', `scale(${width / 800})`);
-        }
-    };
+    window.onresize = (ev) => { updateContentScale(); };
 });
 
 document.addEventListener('drop', (e) => {

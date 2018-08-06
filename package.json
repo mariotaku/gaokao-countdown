@@ -27,6 +27,7 @@
     "datejs": "^1.0.0-rc3",
     "electron-settings": "^3.2.0",
     "flipclock": "^0.8.2",
+    "jquery-ui": "^1.12.1",
     "node-vibrant": "^3.0.0"
   },
   "build": {
