@@ -1,45 +1,29 @@
-# electron-quick-start
+# 高考倒计时
 
-**Clone and run for a quick way to see Electron in action.**
+## 功能
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
+* 窗口可缩放自适应
+* 可更换背景图片
+* 背景遮罩从背景图片取色（使用[node-vibrant](https://github.com/akfish/node-vibrant/)）
+* 支持macOS全屏幕显示
+* 支持窗口无边框显示
 
-**Use this app along with the [Electron API Demos](https://electronjs.org/#get-started) app for API code examples to help you get started.**
+## 构建
+````
+yarn
+yarn dist
+````
 
-A basic Electron application needs just these files:
+二进制文件未来可能会随tag发布。
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
+## 使用指南
 
-You can learn more about each of these components within the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start).
+如需更换背景图片，将图文件拖拽进界面内即可。
 
-## To Use
+在界面内任意区域右键点击打开上下文菜单。
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+如果需要还原默认图片，选择“还原背景”。
 
-```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
-```
+如果需要展示无标题栏的窗口，选择“无边框”。
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
-
-## Resources for Learning Electron
-
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [electronjs.org/community#boilerplates](https://electronjs.org/community#boilerplates) - sample starter apps created by the community
-- [electron/electron-quick-start](https://github.com/electron/electron-quick-start) - a very basic starter Electron app
-- [electron/simple-samples](https://github.com/electron/simple-samples) - small applications with ideas for taking them further
-- [electron/electron-api-demos](https://github.com/electron/electron-api-demos) - an Electron app that teaches you how to use Electron
-- [hokein/electron-sample-apps](https://github.com/hokein/electron-sample-apps) - small demo apps for the various Electron APIs
-
-## License
-
-[CC0 1.0 (Public Domain)](LICENSE.md)
+窗口可以任意缩放，当尺寸过小时，会自动缩放内容，保证展示正常。
