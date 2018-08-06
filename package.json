@@ -1,10 +1,12 @@
 {
   "name": "electron-quick-start",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "高考倒计时",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -14,15 +16,32 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Mariotaku Lee",
+  "license": "ISC",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-builder": "^20.26.1"
   },
   "dependencies": {
+    "data-uri-to-buffer": "^2.0.0",
     "datejs": "^1.0.0-rc3",
     "electron-settings": "^3.2.0",
+    "file-url": "^2.0.2",
     "flipclock": "^0.8.2",
     "node-vibrant": "^3.0.0"
+  },
+  "build": {
+    "appId": "org.mariotaku.gaokao-countdown",
+    "productName": "高考倒计时",
+    "mac": {
+      "target": [
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
   }
 }

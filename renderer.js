@@ -2,6 +2,7 @@ const { remote } = require('electron');
 const settings = require('electron-settings');
 const { app, Menu, MenuItem } = remote;
 const Vibrant = require('node-vibrant');
+var dataUriToBuffer = require('data-uri-to-buffer');
 
 window.$ = window.jQuery = require('jquery');
 require('flipclock');
@@ -43,11 +44,29 @@ function setupCountdown() {
 function setupBackground() {
     let countdownBackground = $('#countdownBackground')
     let bg = loadBackground();
-    var vibrant = Vibrant.from(bg).getPalette((err, palette) => {
-        let swatch = palette.DarkVibrant;
+    let vibrant;
+    if (bg.startsWith('data:')) {
+        vibrant = Vibrant.from(dataUriToBuffer(bg));
+    } else {
+        vibrant = Vibrant.from(bg);
+    }
+    if (!vibrant) {
+        return;
+    }
+    vibrant.getPalette((err, palette) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(palette);
+        let swatch = palette.DarkVibrant || palette.DarkMuted;
+        if (!swatch) {
+            return;
+        }
         let backgroundColor = `rgba(${swatch.r}, ${swatch.g}, ${swatch.b}, 0.5)`
 
         let styleSheet = getStyleSheet('app_styles');
+        console.log(backgroundColor);
         for (var i = 0; i < styleSheet.cssRules.length; i++) {
             let rule = styleSheet.cssRules[i];
             if (rule.selectorText == '.background::before') {
@@ -79,11 +98,10 @@ function loadBackground() {
 
 function applyBackground(file) {
     var reader = new FileReader();
-    reader.addEventListener("load", () => {
+    reader.onload = () => {
         settings.set('app-background', reader.result);
-
         setupBackground();
-    }, false);
+    };
     reader.readAsDataURL(file);
 }
 
@@ -96,8 +114,8 @@ function resetBackground() {
 function toggleFrameless() {
     settings.set('frameless', !(settings.get('frameless') == true));
 
-    remote.app.relaunch();
-    remote.app.exit(0);
+    app.relaunch();
+    app.exit(0);
 }
 
 function dropImage(ev) {
