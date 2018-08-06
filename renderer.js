@@ -1,5 +1,6 @@
 const { remote } = require('electron');
-const { Menu, MenuItem } = remote;
+const settings = require('electron-settings');
+const { app, Menu, MenuItem } = remote;
 
 window.$ = window.jQuery = require('jquery');
 require('flipclock');
@@ -40,7 +41,7 @@ function setupCountdown() {
 
 function setupBackground() {
     $('#countdownBackground').attr('src', function (i, src) {
-        var bg = localStorage.getItem('app-background');
+        var bg = settings.get('app-background');
         if (!bg) return './zz47.jpg';
         return bg;
     });
@@ -49,7 +50,7 @@ function setupBackground() {
 function applyBackground(file) {
     var reader = new FileReader();
     reader.addEventListener("load", function () {
-        localStorage.setItem('app-background', reader.result);
+        settings.set('app-background', reader.result);
 
         setupBackground();
     }, false);
@@ -57,9 +58,16 @@ function applyBackground(file) {
 }
 
 function resetBackground() {
-    localStorage.removeItem('app-background');
+    settings.delete('app-background');
 
     setupBackground();
+}
+
+function toggleFrameless() {
+    settings.set('frameless', !(settings.get('frameless') == true));
+
+    remote.app.relaunch();
+    remote.app.exit(0);
 }
 
 function dropImage(ev) {
@@ -98,13 +106,16 @@ function removeDragData(ev) {
 }
 
 function setupContextMenu() {
-    const menu = new Menu();
-    menu.append(new MenuItem({ label: `高考倒计时`, enabled: false }));
-    menu.append(new MenuItem({ type: 'separator' }));
-    menu.append(new MenuItem({ label: '还原背景', click() { resetBackground(); } }));
-
     window.addEventListener('contextmenu', (e) => {
         e.preventDefault();
+
+        let frameless = settings.get('frameless') == true;
+
+        const menu = new Menu();
+        menu.append(new MenuItem({ label: `高考倒计时`, enabled: false }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({ label: '还原背景', click: resetBackground }));
+        menu.append(new MenuItem({ type: 'checkbox', label: '无边框', checked: frameless, click: toggleFrameless }));
         menu.popup({ window: remote.getCurrentWindow() });
     }, false);
 }

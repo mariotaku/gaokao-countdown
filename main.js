@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
+const settings = require('electron-settings');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,7 +8,8 @@ let mainWindow
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  let frameless = settings.get('frameless') == true
+  mainWindow = new BrowserWindow({ width: 800, height: 600, frame: !frameless })
   mainWindow.setContentSize(800, 600)
   mainWindow.isFullScreenable(true)
 
