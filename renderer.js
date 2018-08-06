@@ -1,6 +1,7 @@
 const { remote } = require('electron');
 const settings = require('electron-settings');
 const { app, Menu, MenuItem } = remote;
+const Vibrant = require('node-vibrant');
 
 window.$ = window.jQuery = require('jquery');
 require('flipclock');
@@ -40,16 +41,45 @@ function setupCountdown() {
 }
 
 function setupBackground() {
-    $('#countdownBackground').css('background-image', function (i, src) {
-        var bg = settings.get('app-background');
-        if (!bg) return 'url("./zz47.jpg")';
+    let countdownBackground = $('#countdownBackground')
+    let bg = loadBackground();
+    var vibrant = Vibrant.from(bg).getPalette((err, palette) => {
+        let swatch = palette.DarkVibrant;
+        let backgroundColor = `rgba(${swatch.r}, ${swatch.g}, ${swatch.b}, 0.5)`
+
+        let styleSheet = getStyleSheet('app_styles');
+        for (var i = 0; i < styleSheet.cssRules.length; i++) {
+            let rule = styleSheet.cssRules[i];
+            if (rule.selectorText == '.background::before') {
+                rule.style['background-color'] = backgroundColor;
+                break;
+            }
+        }
+    });
+
+    countdownBackground.css('background-image', (i, src) => {
         return `url("${bg}")`;
     });
 }
 
+function getStyleSheet(unique_title) {
+    for (var i = 0; i < document.styleSheets.length; i++) {
+        var sheet = document.styleSheets[i];
+        if (sheet.title == unique_title) {
+            return sheet;
+        }
+    }
+}
+
+function loadBackground() {
+    var bg = settings.get('app-background');
+    if (!bg) return './def_bg.jpg';
+    return bg;
+}
+
 function applyBackground(file) {
     var reader = new FileReader();
-    reader.addEventListener("load", function () {
+    reader.addEventListener("load", () => {
         settings.set('app-background', reader.result);
 
         setupBackground();

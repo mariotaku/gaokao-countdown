@@ -3,6 +3,8 @@ html, body {
   width: 100%;
   height: 100%;
   margin: 0%;
+  user-select: none;
+  pointer-events: none;
 }
 
 .background {
@@ -11,7 +13,6 @@ html, body {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-image: url('./zz47.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -23,7 +24,7 @@ html, body {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(80, 143, 238, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .countdown-container {
@@ -32,7 +33,7 @@ html, body {
 
 .banner-title {
   position: absolute;
-  top: -130px;
+  top: -180px;
   width: 100%;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
