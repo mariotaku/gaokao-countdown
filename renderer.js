@@ -8,37 +8,53 @@ window.$ = window.jQuery = require('jquery');
 require('flipclock');
 require('datejs');
 
-function setupCountdown() {
-    var now = new Date()
-    var nextDate = new Date()
-    nextDate.setMonth(5) // June
-    nextDate.setDate(7)
-    nextDate.setHours(9)
-    nextDate.setMinutes(0)
-    nextDate.setSeconds(0)
+let clockOptions = {
+    clockFace: 'DailyCounter',
+    clockFaceOptions: {
+        countdown: true,
+        showSeconds: true,
+        defaultLanguage: 'zh-cn',
+        language: 'zh-cn',
+    }
+}
 
-    if (nextDate.getTime() < now.getTime()) {
-        nextDate.setFullYear(now.getFullYear() + 1)
+function setupCountdown(initClock) {
+    var now = new Date()
+    var examStart = Date.parse('August 6, 16:44 AM')
+    var examEnd = Date.parse('August 6, 16:45 AM')
+
+    var examInProgress = false;
+    if (examStart.getTime() < now.getTime()) {
+        // Exam in progress...
+        if (now.getTime() < examEnd.getTime()) {
+            examInProgress = true;
+        } else {
+            examStart.setFullYear(now.getFullYear() + 1)
+        }
     }
 
-    $('#countdownYear').text(function (i, oldtext) {
-        return nextDate.getFullYear();
+    $('#countdownYear').text((i, oldtext) => {
+        return examStart.getFullYear();
     })
 
-    var countdownSeconds = (nextDate.getTime() - now.getTime()) / 1000;
-    var clock = $('#countdownClock').FlipClock(countdownSeconds, {
-        clockFace: 'DailyCounter',
-        clockFaceOptions: {
-            countdown: true,
-            showSeconds: true,
-            defaultLanguage: 'zh-cn',
-            language: 'zh-cn',
+    if (examInProgress) {
+        if (initClock) {
+            var clock = $('#countdownClock').FlipClock(0, clockOptions);
+            clock.stop();
         }
-    });
 
-    clock.face.once('stop', function () {
-        setupCountdown();
-    })
+        let timeTillEnd = examEnd.getTime() - now.getTime();
+        window.setInterval(() => { setupCountdown(true); }, timeTillEnd);
+        return;
+    }
+    var countdownSeconds = (examStart.getTime() - now.getTime()) / 1000;
+
+    if (initClock) {
+        var clock = $('#countdownClock').FlipClock(countdownSeconds, clockOptions);
+        clock.face.once('stop', () => {
+            setupCountdown(false);
+        })
+    }
 }
 
 function setupBackground() {
@@ -65,7 +81,6 @@ function setupBackground() {
         } else {
             backgroundColor = `rgba(0, 0, 0, 0.5)`
         }
-
 
         let styleSheet = getStyleSheet('app_styles');
         for (var i = 0; i < styleSheet.cssRules.length; i++) {
@@ -173,23 +188,21 @@ function setupContextMenu() {
 
 $(document).ready(function () {
     setupBackground();
-    setupCountdown();
+    setupCountdown(true);
     setupContextMenu();
 
     // Restart every midnight to prevent from memory leaks and inaccurates
     var interval = Date.today().add(1).days().getTime() - Date.now();
-    window.setInterval(function () {
-        setupCountdown();
-    }, interval);
+    window.setInterval(() => { setupCountdown(true); }, interval);
 });
 
-document.addEventListener('drop', function (e) {
+document.addEventListener('drop', (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     dropImage(e);
 });
-document.addEventListener('dragover', function (e) {
+document.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
 });

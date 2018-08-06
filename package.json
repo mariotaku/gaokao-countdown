@@ -26,7 +26,6 @@
     "data-uri-to-buffer": "^2.0.0",
     "datejs": "^1.0.0-rc3",
     "electron-settings": "^3.2.0",
-    "file-url": "^2.0.2",
     "flipclock": "^0.8.2",
     "node-vibrant": "^3.0.0"
   },
