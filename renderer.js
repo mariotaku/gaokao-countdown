@@ -212,6 +212,7 @@ function fixLabelPosition() {
     } else {
         dayLabel.css('right', '-86px');
     }
+    dayLabel.text('天')
     this.dayDigits = dayDigits;
 }
 
