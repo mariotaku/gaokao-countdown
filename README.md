@@ -4,7 +4,7 @@
 
 * 窗口可缩放自适应
 * 可更换背景图片
-* 背景遮罩从背景图片取色（使用[node-vibrant](https://github.com/akfish/node-vibrant/)）
+* 可设置背景遮罩色
 * 支持macOS全屏幕显示
 * 支持窗口无边框显示
 

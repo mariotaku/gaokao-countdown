@@ -1,12 +1,13 @@
 const { remote } = require('electron');
 const settings = require('electron-settings');
 const { app, Menu, MenuItem } = remote;
-const Vibrant = require('node-vibrant');
-var dataUriToBuffer = require('data-uri-to-buffer');
 
 window.$ = window.jQuery = require('jquery');
+require('popper.js');
+require('bootstrap');
 require('flipclock');
 require('datejs');
+require('spectrum-colorpicker');
 
 var dayDigits = 0;
 
@@ -63,43 +64,21 @@ function setupCountdown(initClock) {
 }
 
 function setupBackground() {
-    let countdownBackground = $('#countdownBackground')
-    let bg = loadBackground();
-    let vibrant;
-    if (bg.startsWith('data:')) {
-        vibrant = Vibrant.from(dataUriToBuffer(bg));
-    } else {
-        vibrant = Vibrant.from(bg);
-    }
-    if (!vibrant) {
-        return;
-    }
-    vibrant.getPalette((err, palette) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        let swatch = palette.DarkVibrant || palette.DarkMuted;
-        let backgroundColor;
-        if (swatch) {
-            backgroundColor = `rgba(${swatch.r}, ${swatch.g}, ${swatch.b}, 0.5)`
-        } else {
-            backgroundColor = `rgba(0, 0, 0, 0.5)`
-        }
-
-        let styleSheet = getStyleSheet('app_styles');
-        for (var i = 0; i < styleSheet.cssRules.length; i++) {
-            let rule = styleSheet.cssRules[i];
-            if (rule.selectorText == '.background::before') {
-                rule.style['background-color'] = backgroundColor;
-                break;
-            }
-        }
+    setBackgroundMask(settings.get('app-background-color'));
+    $('#countdownBackground').css('background-image', (i, src) => {
+        return `url("${loadBackground()}")`;
     });
+}
 
-    countdownBackground.css('background-image', (i, src) => {
-        return `url("${bg}")`;
-    });
+function setBackgroundMask(color) {
+    let styleSheet = getStyleSheet('app_styles');
+    for (var i = 0; i < styleSheet.cssRules.length; i++) {
+        let rule = styleSheet.cssRules[i];
+        if (rule.selectorText == '.background::before') {
+            rule.style['background-color'] = color;
+            break;
+        }
+    }
 }
 
 function getStyleSheet(unique_title) {
@@ -162,7 +141,6 @@ function dropImage(ev) {
 }
 
 function removeDragData(ev) {
-    console.log('Removing drag data')
 
     if (ev.dataTransfer.items) {
         // Use DataTransferItemList interface to remove the drag data
@@ -183,6 +161,7 @@ function setupContextMenu() {
         menu.append(new MenuItem({ label: `高考倒计时`, enabled: false }));
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: '还原背景', click: resetBackground }));
+        menu.append(new MenuItem({ label: '设置背景遮罩', click: changeBackgroundMask }));
         menu.append(new MenuItem({ type: 'checkbox', label: '无边框', checked: frameless, click: toggleFrameless }));
         menu.append(new MenuItem({ type: 'separator' }));
         menu.append(new MenuItem({ label: '退出', click: function () { app.exit(0); } }));
@@ -215,6 +194,18 @@ function fixLabelPosition() {
     this.dayDigits = dayDigits;
 }
 
+function changeBackgroundMask() {
+    $("#maskColorPicker").spectrum({
+        color: settings.get('app-background-color'),
+        flat: true,
+        showInput: false,
+        showAlpha: true,
+        showButtons: false,
+        preferredFormat: 'rgb'
+    });
+    $('#maskColorPickerModal').modal();
+}
+
 $(document).ready(function () {
     setupBackground();
     setupCountdown(true);
@@ -238,4 +229,12 @@ document.addEventListener('drop', (e) => {
 document.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
+});
+
+$('#maskColorPickerSave').on('click', (ev) => {
+    let backgroundColor = $("#maskColorPicker").spectrum('get').toRgbString();
+    settings.set('app-background-color', backgroundColor);
+    $('#maskColorPickerModal').modal('hide');
+
+    setBackgroundMask(backgroundColor);
 });

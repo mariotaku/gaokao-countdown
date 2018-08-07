@@ -6,6 +6,8 @@
   <title>高考倒计时</title>
 
   <link rel="stylesheet" href="node_modules/flipclock/dist/flipclock.css" />
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="node_modules/spectrum-colorpicker/spectrum.css" />
   <link rel="stylesheet" href="styles.css" title="app_styles" />
 
 </head>
@@ -13,12 +15,32 @@
 <body>
   <div id="countdownBackground" class="background">
     <div class="countdown-container">
-      <p id="countdownTitle" class="banner-title">距离<span id="countdownYear"></span>年高考还有</p>
+      <p id="countdownTitle" class="banner-title">距离
+        <span id="countdownYear"></span>年高考还有</p>
       <div id="countdownClock"></div>
     </div>
-    
+
   </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="maskColorPickerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">选择颜色</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type='text' id="maskColorPicker" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="maskColorPickerSave" class="btn btn-primary">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     // You can also require other files to run in this process
